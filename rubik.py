@@ -21,20 +21,37 @@ class Face:
         self.nodes = nodes
     def GetColor(self):
         return self.color
-    def Rotate(self,nodes, direction):
-        if direction == "L":
+    def GetLineNodes(self, line):
+        nodes = []
+        if line == "L":
+            for i in range(ROW):
+                nodes.append(self.nodes[i][0])
+        elif line == "R":
+            for i in range(ROW):
+                nodes.append(self.nodes[i][2])
+        elif line == "U":
+            nodes = self.nodes[0]
+        elif line == "D":
+            nodes = self.nodes[2]
+        return nodes
+
+    def ChangeLine(self,nodes, line):
+        if line == "L":
             for i in range(ROW):
                 self.nodes[i][0] = nodes[i]
-        elif direction == "R":
+        elif line == "R":
             for i in range(ROW):
                 self.nodes[i][2] = nodes[i]
-        elif direction == "U":
+        elif line == "U":
             self.nodes[0] = nodes
-        elif direction == "D":
+        elif line == "D":
             self.nodes[2] = nodes
-        elif direction == "RotL":
-            pass
-            #self.nodes[0][0], self.nodes[0][1], self.nodes[0][2],self.nodes[1][2], self.nodes[2][2], self.nodes[2][0],self.nodes[2][1], self.nodes[1][0] = 
+        
+    def RotateFace(self,direction):
+        if direction == "L":
+            self.nodes[0][0], self.nodes[0][1], self.nodes[0][2],self.nodes[1][2], self.nodes[2][2], self.nodes[2][0],self.nodes[2][1], self.nodes[1][0] = self.nodes[2][0], self.nodes[1][0], self.nodes[0][0],self.nodes[0][1],self.nodes[0][2],self.nodes[2][2],self.nodes[1][2],self.nodes[2][1]
+        elif direction == "R":
+            self.nodes[0][0], self.nodes[0][1], self.nodes[0][2],self.nodes[1][2], self.nodes[2][2], self.nodes[2][0],self.nodes[2][1], self.nodes[1][0] = self.nodes[0][2],self.nodes[1][2],self.nodes[2][2],self.nodes[2][1],self.nodes[2][0],self.nodes[0][0],self.nodes[1][0],self.nodes[0][1]
 
 class Cube:
     
@@ -42,31 +59,34 @@ class Cube:
         self.faces = faces
         self.all_colors = ["red","blue","yellow","green","white","orange"]
         self.color_pos = {"front":"red",
-                    "back":"orange",
-                    "top":"blue",
-                    "bottom":"green",
-                    "left":"yellow",
-                    "right":"white"}
+                        "back":"orange",
+                        "top":"blue",
+                        "bottom":"green",
+                        "left":"yellow",
+                        "right":"white"}
+        
+    def SetFaces(self, faces):
+        self.faces = faces
     def ChangeFront(self, color):
         for key in self.color_pos:
             if self.color_pos[key] == color:
                 if key == "top":
-                    self.color_pos["front"],self.color_pos["back"],self.color_pos["top"],self.color_pos["bottom"] = self.color_pos["top"],self.color_pos["bottom"],self.color_pos["front"],self.color_pos["back"]
+                    self.color_pos["front"],self.color_pos["back"],self.color_pos["top"],self.color_pos["bottom"] = self.color_pos["bottom"],self.color_pos["top"],self.color_pos["front"],self.color_pos["back"]
                 elif key == "bottom":
-                    self.color_pos["front"],self.color_pos["back"],self.color_pos["top"],self.color_pos["bottom"] = self.color_pos["bottom"],self.color_pos["top"],self.color_pos["back"],self.color_pos["front"]
+                    self.color_pos["front"],self.color_pos["back"],self.color_pos["top"],self.color_pos["bottom"] = self.color_pos["top"],self.color_pos["bottom"],self.color_pos["back"],self.color_pos["front"]
                 elif key == "left":
-                    self.color_pos["front"],self.color_pos["back"],self.color_pos["left"],self.color_pos["right"] = self.color_pos["left"],self.color_pos["right"],self.color_pos["front"],self.color_pos["back"]
+                    self.color_pos["front"],self.color_pos["back"],self.color_pos["left"],self.color_pos["right"] = self.color_pos["right"],self.color_pos["left"],self.color_pos["front"],self.color_pos["back"]
                 elif key == "right":
-                    self.color_pos["front"],self.color_pos["back"],self.color_pos["left"],self.color_pos["right"] = self.color_pos["right"],self.color_pos["left"],self.color_pos["back"],self.color_pos["front"]
+                    self.color_pos["front"],self.color_pos["back"],self.color_pos["left"],self.color_pos["right"] = self.color_pos["left"],self.color_pos["right"],self.color_pos["back"],self.color_pos["front"]
                 elif key == "back":
-                    self.color_pos["front"],self.color_pos["back"],self.color_pos["left"],self.color_pos["right"] = self.color_pos["back"],self.color_pos["front"],self.color_pos["right"],self.color_pos["left"]
+                    self.color_pos["front"],self.color_pos["back"],self.color_pos["top"],self.color_pos["bottom"] = self.color_pos["back"],self.color_pos["front"],self.color_pos["bottom"],self.color_pos["top"]
                 break
             
     def GetFaceFromPos(self,pos):
-        for key,value in self.color_pos:
+        for key in self.color_pos:
             if key == pos:
                 for i in range(len(self.faces)):
-                    if value == self.faces[i].GetColor():
+                    if self.color_pos[key] == self.faces[i].GetColor():
                         return i
     def PrintCube(self):
         print_pos = {}
@@ -108,20 +128,52 @@ class Cube:
                 output_str += "\n--- + --- + --- + --- + --- + --- + --- + --- + ---"
         print(output_str)
 
-    def RotateLU(self, color):
+    def RotateLD(self, color):
         self.ChangeFront(color)
         FRONT = self.GetFaceFromPos("front")
+        BACK = self.GetFaceFromPos("back")
         TOP = self.GetFaceFromPos("top")
         BOTTOM = self.GetFaceFromPos("bottom")
         LEFT = self.GetFaceFromPos("left")
-        RIGHT = self.GetFaceFromPos("right")
+        #RIGHT = self.GetFaceFromPos("right")
 
-        for i in range(ROW):
-            self.faces[FRONT].GetNodes()[i][0], #the intent was to rotate the same way i change front 
+        front_line = self.faces[FRONT].GetLineNodes("L")
+        top_line = self.faces[TOP].GetLineNodes("L")
+        bottom_line = self.faces[BOTTOM].GetLineNodes("L")
+        back_line = self.faces[BACK].GetLineNodes("L")
+
+        self.faces[FRONT].ChangeLine(bottom_line, "L")
+        self.faces[TOP].ChangeLine(front_line, "L")
+        self.faces[BACK].ChangeLine(top_line, "L")
+        self.faces[BOTTOM].ChangeLine(back_line,"L")
+
+        self.faces[LEFT].RotateFace("L")
+
+    def RotateLU(self, color):
+        self.ChangeFront(color)
+        FRONT = self.GetFaceFromPos("front")
+        BACK = self.GetFaceFromPos("back")
+        TOP = self.GetFaceFromPos("top")
+        BOTTOM = self.GetFaceFromPos("bottom")
+        LEFT = self.GetFaceFromPos("left")
+        #RIGHT = self.GetFaceFromPos("right")
+
+        front_line = self.faces[FRONT].GetLineNodes("L")
+        top_line = self.faces[TOP].GetLineNodes("L")
+        bottom_line = self.faces[BOTTOM].GetLineNodes("L")
+        back_line = self.faces[BACK].GetLineNodes("L")
+
+        self.faces[FRONT].ChangeLine(top_line, "L")
+        self.faces[TOP].ChangeLine(back_line, "L")
+        self.faces[BACK].ChangeLine(bottom_line, "L")
+        self.faces[BOTTOM].ChangeLine(front_line,"L")
+
+        self.faces[LEFT].RotateFace("R")
+        
 
 def CreateCube():
-    faces = []
-    rubiks_cube = Cube([0,0,0,0,0,0])
+    faces = [0,0,0,0,0,0]
+    rubiks_cube = Cube(faces)
     for i in range(6):
         face = Face([[0,0,0],
                     [0,0,0],
@@ -143,11 +195,15 @@ def CreateCube():
                 face.nodes[j][0] = Node([rubiks_cube.color_pos["front"], rubiks_cube.color_pos["bottom"], rubiks_cube.color_pos["left"]],2)
                 face.nodes[j][1] = Node([rubiks_cube.color_pos["front"], rubiks_cube.color_pos["bottom"]], 1)
                 face.nodes[j][2] = Node([rubiks_cube.color_pos["front"], rubiks_cube.color_pos["bottom"], rubiks_cube.color_pos["right"]], 2)
-        faces.append(face)
-    rubik = Cube(faces)
-    return rubik
+        faces[i] = face
+        #print(rubiks_cube.faces[i].GetColor())
+        #rubiks_cube.PrintCube()
+    rubiks_cube.SetFaces(faces)
+    return rubiks_cube
 
 rubiks_cube = CreateCube()
+#rubiks_cube.RotateLD("yellow")
+#rubiks_cube.RotateLD("blue")
 rubiks_cube.PrintCube()
 print(rubiks_cube.faces[5].GetNodes()[0][0].GetColors()[0]) 
         
