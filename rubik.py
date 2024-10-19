@@ -1,4 +1,5 @@
 ROW = 3
+import random
 
 class Node:
     def __init__(self, _colors, _node_type):
@@ -374,6 +375,34 @@ class Cube:
         elif key=="bottom":
             self.RotateLU("left")
 
+    def RotateFaceL(self, key):
+        if key=="front":
+            self.RotateLU("right")
+        elif key== "back":
+            self.RotateLU("left")
+        elif key=="left":
+            self.RotateLU("front")
+        elif key=="right":
+            self.RotateRU("front")
+        elif key=="top":
+            self.RotateUL("front")
+        elif key=="bottom":
+            self.RotateDL("front")
+
+    def RotateFaceR(self, key):
+        if key=="front":
+            self.RotateLD("right")
+        elif key== "back":
+            self.RotateLD("left")
+        elif key=="left":
+            self.RotateLD("front")
+        elif key=="right":
+            self.RotateRD("front")
+        elif key=="top":
+            self.RotateUR("front")
+        elif key=="bottom":
+            self.RotateDR("front")
+
 def CreateCube():
     faces = [0,0,0,0,0,0]
     rubiks_cube = Cube(faces)
@@ -406,8 +435,25 @@ def CreateCube():
     return rubiks_cube
 
 rubiks_cube = CreateCube()
-rubiks_cube.RotateDR("front")
-rubiks_cube.RotateDL("front")
+num_of_operations = 10
+operations = [rubiks_cube.RotateLU,
+               rubiks_cube.RotateLD,
+               rubiks_cube.RotateRU,
+               rubiks_cube.RotateRD,
+               rubiks_cube.RotateUL,
+               rubiks_cube.RotateUR,
+               rubiks_cube.RotateDL,
+               rubiks_cube.RotateDR,
+               rubiks_cube.RotateFaceL,
+               rubiks_cube.RotateFaceR]
+for i in range(num_of_operations):
+    choice_operation = random.choice(operations)
+    choice_face = random.choice(list(rubiks_cube.color_pos.keys()))
+    choice_operation(choice_face)
+    print(choice_operation,choice_face)
+    rubiks_cube.PrintCube()
+
+
 rubiks_cube.PrintCube()
 #back = rubiks_cube.GetFaceFromPos("back")
 #front = rubiks_cube.GetFaceFromPos("front")
