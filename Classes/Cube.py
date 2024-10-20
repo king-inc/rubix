@@ -3,7 +3,7 @@ from Classes.Face import Face
 ROW = 3
 
 class Cube:
-    def __init__(self, faces: Face):
+    def __init__(self, faces):
         self.faces = faces
         self.all_colors = ["red","blue","yellow","green","white","orange"]
         self.color_pos = {"front":"red",
@@ -18,7 +18,17 @@ class Cube:
         self.BOTTOM = self.GetFaceFromPos("bottom")
         self.LEFT = self.GetFaceFromPos("left")
         self.RIGHT = self.GetFaceFromPos("right")
-        
+
+    def __eq__(self, _cube):
+        output = True
+        for i in range(len(self.faces)):
+            output = output and self.faces[i] == _cube.GetFaces()[i]
+            if not output:
+                break
+        return output
+
+    def GetFaces(self):
+        return self.faces
     def SetFaces(self, faces):
         self.faces = faces
     def ChangeFront(self, color):
@@ -78,7 +88,7 @@ class Cube:
         for key in self.color_pos:
             if key == pos:
                 for i in range(len(self.faces)):
-                    if self.faces[i] != 0 and self.color_pos[key] == self.faces[i].GetColor():
+                    if self.faces[i] is not 0 and self.color_pos[key] == self.faces[i].GetColor():
                         return i
                 return False
     def PrintCube(self):

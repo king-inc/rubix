@@ -3,10 +3,27 @@ from Classes.Node import Node
 ROW = 3
 
 class Face: 
-    def __init__(self, nodes: Node, color):
+    def __init__(self, nodes, color):
         self.nodes = nodes
         self.color = color
 
+    def __eq__(self, _face):
+        #output is true by default because its used in and operations
+        output = True
+        #print(_face)
+        if self.color == _face.GetColor():
+            for i in range(ROW):
+                for j in range(ROW):
+                    output = output and self.nodes[i][j] == _face.GetNodes()[i][j]
+                    if not output:
+                        break
+                if not output:
+                    break
+        else:
+            output = False
+
+        return output
+    
     def GetNodes(self):
         return self.nodes
     def SetNodes(self, nodes):

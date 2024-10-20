@@ -53,5 +53,34 @@ def ScatterCube(cube, scatter):
         choice_face = random.choice(list(cube.color_pos.keys()))
         choice_operation(choice_face)
         print(choice_operation,choice_face)
-        cube.PrintCube()
+    
+    cube.PrintCube()
+    return cube
+
+
+def SolveCubeRandom(cube):
+    correct_cube = CreateCube()
+    operations = [cube.RotateLU,
+               cube.RotateLD,
+               cube.RotateRU,
+               cube.RotateRD,
+               cube.RotateUL,
+               cube.RotateUR,
+               cube.RotateDL,
+               cube.RotateDR,
+               cube.RotateFaceL,
+               cube.RotateFaceR]
+    correct = False
+    num_of_operations = 0
+    while not correct:
+        if cube == correct_cube:
+            correct = True
+        else:
+            choice_operation = random.choice(operations)
+            choice_face = random.choice(list(cube.color_pos.keys()))
+            choice_operation(choice_face)
+            print(choice_operation,choice_face)
+            num_of_operations += 1
+    cube.PrintCube()
+    print(num_of_operations)
     return cube
