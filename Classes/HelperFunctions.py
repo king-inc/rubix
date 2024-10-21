@@ -38,6 +38,7 @@ def CreateCube():
 
 
 def ScatterCube(cube, scatter):
+    moves = []
     operations = [cube.RotateLU,
                cube.RotateLD,
                cube.RotateRU,
@@ -52,11 +53,48 @@ def ScatterCube(cube, scatter):
         choice_operation = random.choice(operations)
         choice_face = random.choice(list(cube.color_pos.keys()))
         choice_operation(choice_face)
+        moves.append((choice_operation,choice_face))
         print(choice_operation,choice_face)
     
     cube.PrintCube()
-    return cube
+    return cube, moves
 
+
+def SolveWithSetMoves(cube, moves):
+    correct_cube = CreateCube()
+    for entry in moves:
+        if entry[0] == cube.RotateLU:
+            print(cube.RotateLD)
+            cube.RotateLD(entry[1])
+        elif entry[0] == cube.RotateLD:
+            print(cube.RotateLU)
+            cube.RotateLU(entry[1])
+        elif entry[0] == cube.RotateRD:
+            print(cube.RotateRU)
+            cube.RotateRU(entry[1])
+        elif entry[0] == cube.RotateRU:
+            print(cube.RotateRD)
+            cube.RotateRD(entry[1])
+        elif entry[0] == cube.RotateUL:
+            print(cube.RotateUR)
+            cube.RotateUR(entry[1])
+        elif entry[0] == cube.RotateUR:
+            print(cube.RotateUL)
+            cube.RotateUL(entry[1])
+        elif entry[0] == cube.RotateDL:
+            print(cube.RotateDR)
+            cube.RotateDR(entry[1])
+        elif entry[0] == cube.RotateDR:
+            print(cube.RotateDL)
+            cube.RotateDL(entry[1])
+        elif entry[0] == cube.RotateFaceL:
+            print(cube.RotateFaceR)
+            cube.RotateFaceR(entry[1])
+        elif entry[0] == cube.RotateFaceR:
+            print(cube.RotateFaceL)
+            cube.RotateFaceL(entry[1])
+    cube.PrintCube()
+    print(cube == correct_cube)
 
 def SolveCubeRandom(cube):
     correct_cube = CreateCube()
@@ -79,8 +117,30 @@ def SolveCubeRandom(cube):
             choice_operation = random.choice(operations)
             choice_face = random.choice(list(cube.color_pos.keys()))
             choice_operation(choice_face)
-            print(choice_operation,choice_face)
+            #print(choice_operation,choice_face)
             num_of_operations += 1
     cube.PrintCube()
     print(num_of_operations)
     return cube
+
+def SuneSolver(cube):
+    correct_cube = CreateCube()
+    operations  = [cube.RotateRU,
+                   cube.RotateUL,
+                   cube.RotateRD,
+                   cube.RotateUL,
+                   cube.RotateRU,
+                   cube.RotateUL,
+                   cube.RotateUL,
+                   cube.RotateRD]
+    curr_op = 0
+    num_of_operations = 0
+    while cube != correct_cube:
+        print(operations[curr_op])
+        operations[curr_op]("front")
+        curr_op+=1
+        num_of_operations += 1
+        if curr_op >= len(operations):
+            curr_op = 0
+    
+    cube.PrintCube()

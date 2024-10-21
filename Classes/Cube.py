@@ -41,46 +41,14 @@ class Cube:
                     return output
                 if key == "bottom":
                     output["front"],output["back"],output["top"],output["bottom"] = output["bottom"],output["top"],output["front"],output["back"]
-                    left = self.GetFaceFromPos("left")
-                    right = self.GetFaceFromPos("right")
-                    if left != False:
-                        self.faces[left].RotateFace("R")
-                    if right != False:
-                        self.faces[right].RotateFace("L")
                 elif key == "top":
                     output["front"],output["back"],output["top"],output["bottom"] = output["top"],output["bottom"],output["back"],output["front"]
-                    left = self.GetFaceFromPos("left")
-                    right = self.GetFaceFromPos("right")
-                    if left != False:
-                        self.faces[left].RotateFace("L")
-                    if right != False:
-                        self.faces[right].RotateFace("R")
                 elif key == "right":
                     output["front"],output["back"],output["left"],output["right"] = output["right"],output["left"],output["front"],output["back"]
-                    top = self.GetFaceFromPos("top")
-                    bottom = self.GetFaceFromPos("bottom")
-                    if top != False:
-                        self.faces[top].RotateFace("L")
-                    if bottom != False:
-                        self.faces[bottom].RotateFace("R")
                 elif key == "left":
                     output["front"],output["back"],output["left"],output["right"] = output["left"],output["right"],output["back"],output["front"]
-                    top = self.GetFaceFromPos("top")
-                    bottom = self.GetFaceFromPos("bottom")
-                    if top != False:
-                        self.faces[top].RotateFace("R")
-                    if bottom != False:
-                        self.faces[bottom].RotateFace("L")
                 elif key == "back":
                     output["front"],output["back"],output["top"],output["bottom"] = output["back"],output["front"],output["bottom"],output["top"]
-                    left = self.GetFaceFromPos("left")
-                    right = self.GetFaceFromPos("right")
-                    if left != False:
-                        self.faces[left].RotateFace("L")
-                        self.faces[left].RotateFace("L")
-                    if right != False:
-                        self.faces[right].RotateFace("R")
-                        self.faces[right].RotateFace("R")
                 break
         return output
             
