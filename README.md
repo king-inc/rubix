@@ -11,3 +11,6 @@
 "D" = Down <br>
 "DL" = Down Line Left <br>
 "DR" = Down Line Right <br>
+<br>
+
+p.s. akerelea and king-inc are the same person, idk why I'm displayed as two accounts
