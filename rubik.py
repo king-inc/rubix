@@ -1,11 +1,13 @@
 from Classes.HelperFunctions import *
+import numpy as np
 
 rubiks_cube = CreateCube()
 rubiks_cube.PrintCube()
-rubiks_cube, moves = ScatterCube(rubiks_cube, 10)
+rubiks_cube= ScatterCube(rubiks_cube, 10)
 #SolveWithSetMoves(rubiks_cube,reversed(moves))
-
-rubiks_cube = SolveCubeRandom(rubiks_cube)
+PerformAction(rubiks_cube,7).PrintCube()
+#print(np.shape(rubiks_cube.faces))
+#rubiks_cube = SolveCubeRandom(rubiks_cube)
 
 #SuneSolver(rubiks_cube)
 #back = rubiks_cube.GetFaceFromPos("back")

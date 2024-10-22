@@ -2,6 +2,7 @@ from Classes.Cube import Cube
 from Classes.Face import Face
 from Classes.Node import Node
 import random
+from math import floor
 
 ROW = 3
 
@@ -36,6 +37,51 @@ def CreateCube():
     rubiks_cube = Cube(faces)
     return rubiks_cube
 
+def PerformAction(cube, action):
+    operation_pos = action%10
+    face_pos = floor(action/10)
+    operations = [cube.RotateLU,
+               cube.RotateLD,
+               cube.RotateRU,
+               cube.RotateRD,
+               cube.RotateUL,
+               cube.RotateUR,
+               cube.RotateDL,
+               cube.RotateDR,
+               cube.RotateFaceL,
+               cube.RotateFaceR
+               ]
+    
+    face = ["front","back","left","right","top","bottom"]
+    operations[operation_pos](face[face_pos])
+    #print(action)
+    return cube
+
+def CalculateReward(cube, correct):
+    #gonna make the reward system more detailed later
+    reward = 0
+    #cube.PrintCube()
+    for i in range(len(cube.faces)):
+        if cube.faces[i] == correct.faces[i]:
+            reward += 10
+        else:
+            reward -= 2
+            if cube.faces[i].CompareLines("L", correct.faces[i]):
+                reward += 1
+            if cube.faces[i].CompareLines("R", correct.faces[i]):
+                reward += 1
+            if cube.faces[i].CompareLines("U", correct.faces[i]):
+                reward += 1
+            if cube.faces[i].CompareLines("D", correct.faces[i]):
+                reward += 1
+            if cube.faces[i].CompareLines("MH", correct.faces[i]):
+                reward += 1
+            if cube.faces[i].CompareLines("MV", correct.faces[i]):
+                reward += 1
+        
+    return reward
+    
+
 
 def ScatterCube(cube, scatter):
     moves = []
@@ -54,10 +100,10 @@ def ScatterCube(cube, scatter):
         choice_face = random.choice(list(cube.color_pos.keys()))
         choice_operation(choice_face)
         moves.append((choice_operation,choice_face))
-        print(choice_operation,choice_face)
+        #print(choice_operation,choice_face)
     
-    cube.PrintCube()
-    return cube, moves
+    #cube.PrintCube()
+    return cube
 
 
 def SolveWithSetMoves(cube, moves):

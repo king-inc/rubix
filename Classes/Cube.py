@@ -27,6 +27,24 @@ class Cube:
                 break
         return output
 
+    def GetMatrixFaces(self):
+        matrix = []
+        keys = {"red":0,
+                "blue":1,
+                "yellow":2,
+                "green":3,
+                "white":4,
+                "orange":5}
+        
+        for i in range(len(self.faces)):
+            face = []
+            for j in range(ROW):
+                line = []
+                for k in range(ROW):
+                    line.append(keys[self.faces[i].GetNodes()[j][k].GetColors()[0]])
+                face.append(line)
+            matrix.append(face)
+        return matrix
     def GetFaces(self):
         return self.faces
     def SetFaces(self, faces):
@@ -56,7 +74,7 @@ class Cube:
         for key in self.color_pos:
             if key == pos:
                 for i in range(len(self.faces)):
-                    if self.faces[i] is not 0 and self.color_pos[key] == self.faces[i].GetColor():
+                    if self.faces[i] != 0 and self.color_pos[key] == self.faces[i].GetColor():
                         return i
                 return False
     def PrintCube(self):

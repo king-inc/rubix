@@ -11,6 +11,8 @@ class Face:
         #output is true by default because its used in and operations
         output = True
         #print(_face)
+        if _face == 0:
+            return False
         if self.color == _face.GetColor():
             for i in range(ROW):
                 for j in range(ROW):
@@ -30,6 +32,25 @@ class Face:
         self.nodes = nodes
     def GetColor(self):
         return self.color
+    def CompareLines(self, line, ex_line):
+        output = True
+        if line == "L":
+            for i in range(ROW):
+                output = output and self.nodes[i][0] == ex_line.nodes[i][0]
+        elif line == "R":
+            for i in range(ROW):
+                output = output and self.nodes[i][2] == ex_line.nodes[i][2]
+        elif line == "MV":
+            for i in range(ROW):
+                output = output and self.nodes[i][1] == ex_line.nodes[i][1]
+        elif line == "MH":
+            output = output and self.nodes[1] == ex_line.nodes[1]
+        elif line == "U":
+            output = output and self.nodes[0] == ex_line.nodes[0]
+        elif line == "D":
+            output = output and self.nodes[2] == ex_line.nodes[2]
+        return output
+    
     def GetLineNodes(self, line):
         nodes = []
         if line == "L":
