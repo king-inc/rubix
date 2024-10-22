@@ -13,4 +13,6 @@
 "DR" = Down Line Right <br>
 <br>
 
-p.s. akerelea and king-inc are the same person, idk why I'm displayed as two accounts
+p.s. akerelea and king-inc are the same person, idk why I'm displayed as two accounts<br>
+
+Also p.s. it needs gymnasium and torch modules to work
