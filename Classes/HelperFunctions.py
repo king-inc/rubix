@@ -38,17 +38,9 @@ def CreateCube():
     return rubiks_cube
 
 def PerformAction(cube, action):
-    operation_pos = action%10
-    face_pos = floor(action/10)
-    operations = [cube.RotateLU,
-               cube.RotateLD,
-               cube.RotateRU,
-               cube.RotateRD,
-               cube.RotateUL,
-               cube.RotateUR,
-               cube.RotateDL,
-               cube.RotateDR,
-               cube.RotateFaceL,
+    operation_pos = action%2
+    face_pos = floor(action/2)
+    operations = [cube.RotateFaceL,
                cube.RotateFaceR
                ]
     
@@ -85,15 +77,7 @@ def CalculateReward(cube, correct):
 
 def ScatterCube(cube, scatter):
     moves = []
-    operations = [cube.RotateLU,
-               cube.RotateLD,
-               cube.RotateRU,
-               cube.RotateRD,
-               cube.RotateUL,
-               cube.RotateUR,
-               cube.RotateDL,
-               cube.RotateDR,
-               cube.RotateFaceL,
+    operations = [cube.RotateFaceL,
                cube.RotateFaceR]
     for i in range(scatter):
         choice_operation = random.choice(operations)

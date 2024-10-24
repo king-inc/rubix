@@ -5,7 +5,7 @@ import torch.optim as optim
 import numpy as np
 import random
 from collections import deque
-
+import pickle
 
 class DQNetwork(nn.Module):
     def __init__(self, state_shape, action_size):
@@ -70,7 +70,7 @@ class DQNAgent:
         self.gamma = 0.99        # Discount factor
         self.epsilon = 1.0       # Exploration rate
         self.epsilon_min = 0.01  # Minimum exploration rate
-        self.epsilon_decay = 0.9987
+        self.epsilon_decay = 0.9987 #0.9987
         self.learning_rate = 0.001
         self.batch_size = 128
         self.buffer_size = 10000000
@@ -86,6 +86,13 @@ class DQNAgent:
         # Synchronize the target network with the Q-network
         self.update_target_network()
     
+    def save(self, file_path):
+        torch.save(self.q_network.state_dict(), file_path)
+        #with open("replay_buffer.pkl","wb") as f:
+            #pickle.dump(self.replay_buffer, f)
+
+    def load(self, file_path):
+        self.q_network.load_state_dict(torch.load(file_path))
     def update_target_network(self):
         """Synchronizes the target network with the Q-network."""
         self.target_network.load_state_dict(self.q_network.state_dict())
@@ -102,6 +109,17 @@ class DQNAgent:
                 q_values = self.q_network(state_tensor)
                 actions.append(torch.argmax(q_values).item())  # Exploit
         return actions
+    
+    def exploit(self, states):
+        actions = []
+        for state in states:
+        # Convert state to a tensor for the CNN (assumes (batch_size, channels, height, width))
+            state_tensor = torch.tensor(state, dtype=torch.float32).unsqueeze(0)  # Add batch dimension
+            with torch.no_grad():
+                q_values = self.q_network(state_tensor)  # Predict Q-values for the current state
+            actions.append(torch.argmax(q_values).item())  # Exploit
+        return actions
+    
     def train(self):
         """Trains the Q-network by sampling experiences from the replay buffer."""
         if self.replay_buffer.size() < self.batch_size*10:

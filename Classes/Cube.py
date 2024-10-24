@@ -326,7 +326,7 @@ class Cube:
         elif key=="left":
             self.RotateLU("front")
         elif key=="right":
-            self.RotateRU("front")
+            self.RotateRD("front")
         elif key=="top":
             self.RotateUL("front")
         elif key=="bottom":
@@ -340,8 +340,8 @@ class Cube:
         elif key=="left":
             self.RotateLD("front")
         elif key=="right":
-            self.RotateRD("front")
+            self.RotateRU("front")
         elif key=="top":
-            self.RotateUR("front")
+            self.RotateUL("front")
         elif key=="bottom":
             self.RotateDR("front")

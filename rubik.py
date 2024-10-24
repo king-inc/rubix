@@ -3,7 +3,8 @@ import numpy as np
 
 rubiks_cube = CreateCube()
 rubiks_cube.PrintCube()
-rubiks_cube= ScatterCube(rubiks_cube, 10)
+#rubiks_cube= ScatterCube(rubiks_cube, 4)
+rubiks_cube.PrintCube()
 #SolveWithSetMoves(rubiks_cube,reversed(moves))
 PerformAction(rubiks_cube,7).PrintCube()
 #print(np.shape(rubiks_cube.faces))
